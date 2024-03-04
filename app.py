@@ -55,24 +55,38 @@ result_template = """
 <p class="snippet">{snippet}</p>
 """
 
+pagination_template = """
+<div class="pagination">
+    <a href="?page={prev_page}">Prev</a>
+    <a href="?page={next_page}">Next</a>
+</div>
+"""
+
 def show_search_form():
     return search_template
 
-def run_search(query):
+def run_search(query, page=1, per_page=10):
     results = search(query)
     fi = Filter(results)
     filtered = fi.filter()
     rendered = search_template
     filtered["snippet"] = filtered["snippet"].apply(lambda x: html.escape(x))
-    for index, row in filtered.iterrows():
-        rendered += result_template.format(**row)
+    
+    # Pagination
+    start = (page - 1) * per_page
+    end = start + per_page
+    for index, row in filtered.iloc[start:end].iterrows():
+        row['rank'] = start + index + 1  # update rank
+        rendered += result_template.format(**row.to_dict())
+    rendered += pagination_template.format(prev_page=max(1, page - 1), next_page=page + 1)
     return rendered
 
 @app.route("/", methods=['GET', 'POST'])
 def search_form():
+    page = request.args.get('page', 1, type=int)
     if request.method == 'POST':
         query = request.form["query"]
-        return run_search(query)
+        return run_search(query, page)
     else:
         return show_search_form()
 
@@ -85,19 +99,7 @@ def mark_relevant():
     storage.update_relevance(query, link, 10)
     return jsonify(success=True)
 
-@app.route('/')
 def index():
     return render_template('index.html')
-
-@app.route('/generate-response', methods=['POST'])
-def generate_response():
-    prompt = request.form['prompt']
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=150
-    )
-    return render_template('response.html', response=response.choices[0].text.strip())
-
 if __name__ == '__main__':
     app.run()
