@@ -6,7 +6,6 @@ We'll use visual studio code to write our code and run it.
 Project Steps
 
 Setup a programmable search engine Custom Search API
-You can create one here
 Create an API key for the engine
 Create a module to search using the API
 Create a Flask application to search and render results

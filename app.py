@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, url_for
 from search import search
 from filter import Filter
 from storage import DBStorage
@@ -58,25 +59,38 @@ result_template = """
 def show_search_form():
     return search_template
 
-def run_search(query):
-    results = search(query)
+def run_search(query, page=1):
+    results = search(query, page)
     fi = Filter(results)
     filtered = fi.filter()
     rendered = search_template
     filtered["snippet"] = filtered["snippet"].apply(lambda x: html.escape(x))
     for index, row in filtered.iterrows():
         rendered += result_template.format(**row)
+    
+    if page > 1:
+        rendered += '<a href="{}">Previous</a>'.format(url_for('search_form', query=query, page=page-1))
+    rendered += '<a href="{}">Next</a>'.format(url_for('search_form', query=query, page=page+1))
+    
     return rendered
 
 @app.route("/", methods=['GET', 'POST'])
 def search_form():
+    print(f"Request method: {request.method}")
     if request.method == 'POST':
         query = request.form["query"]
-        return run_search(query)
+    else:
+        query = request.args.get('query', '')
+    page = request.args.get('page', 1, type=int)
+    print(f"Query: {query}, Page: {page}")
+    if query:
+        return run_search(query, page)
     else:
         return show_search_form()
-
-@app.route("/relevant", methods=["POST"])
+        if query:
+            return run_search(query, page)
+        else:
+            return show_search_form()
 def mark_relevant():
     data = request.get_json()
     query = data["query"]
