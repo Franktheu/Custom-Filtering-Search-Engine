@@ -45,6 +45,8 @@ search_template = styles + """
     <div style="display: flex; justify-content: center; align-items: center; height: 9vh; background-color: white;">
         <form action="/" method="post" style="display: flex; border: 1px solid #ccc; border-radius: 24px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
             <input type="text" name="query" style="flex: 1; border: none; padding: 12px; font-size: 16px; outline: none; box-shadow: 0 0 5px lightblue;" placeholder="Enter query...">
+            <input type="checkbox" name="tracker_filter" value="Yes"> Tracker Filter<br>
+            <input type="checkbox" name="content_filter" value="Yes"> Content Filter<br>
             <input type="submit" value="Search" style="border: none; background-color: #4CAF50; color: white; font-size: 16px; padding: 12px 20px; cursor: pointer; border-radius: 0 24px 24px 0;">
         </form>
     </div>
@@ -65,9 +67,9 @@ pagination_template = """
 def show_search_form():
     return search_template
 
-def run_search(query, page=1, per_page=10):
+def run_search(query, tracker_filter, content_filter, page=1, per_page=10):
     results = search(query)
-    fi = Filter(results)
+    fi = Filter(results, tracker_filter, content_filter)
     filtered = fi.filter()
     rendered = search_template
     filtered["snippet"] = filtered["snippet"].apply(lambda x: html.escape(x))
@@ -86,7 +88,9 @@ def search_form():
     page = request.args.get('page', 1, type=int)
     if request.method == 'POST':
         query = request.form["query"]
-        return run_search(query, page)
+        tracker_filter = request.form.get("tracker_filter") == "Yes"
+        content_filter = request.form.get("content_filter") == "Yes"
+        return run_search(query, tracker_filter, content_filter, page)
     else:
         return show_search_form()
 
