@@ -17,13 +17,15 @@ def tracker_urls(row):
     return len([a for a in all_domains if a in domains])
 
 def get_page_content(row):
-    soup = BeautifulSoup(row["html"])
+    soup = BeautifulSoup(row["html"],'html.parser')
     text = soup.get_text()
     return text
 
 class Filter():
-    def __init__(self, results):
+    def __init__(self, results, tracker_filter, content_filter):
         self.filtered = results.copy()
+        self.apply_tracker_filter = tracker_filter
+        self.apply_content_filter = content_filter
 
     def tracker_filter(self):
         tracker_count = self.filtered.apply(tracker_urls, axis=1)
@@ -40,8 +42,10 @@ class Filter():
         self.filtered["rank"] += word_count
 
     def filter(self):
-        self.tracker_filter()
-        self.content_filter()
+        if self.apply_tracker_filter:
+            self.tracker_filter()
+        if self.apply_content_filter:
+            self.content_filter()
         self.filtered = self.filtered.sort_values("rank", ascending=True)
         self.filtered["rank"] = self.filtered["rank"].round()
         return self.filtered
