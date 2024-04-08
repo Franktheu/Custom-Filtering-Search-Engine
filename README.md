@@ -15,11 +15,11 @@ You can find the code for this project here.
 
 FILE OVERVIEW:
 
-app.py - the web interface
-filter.py - the code to filter results
-search.py - code to get the search results
-settings.py - settings needed by the other files
-storage.py - code to save the results to a database
+1. app.py - the web interface
+2. filter.py - the code to filter results
+3. search.py - code to get the search results
+4. settings.py - settings needed by the other files
+5. storage.py - code to save the results to a database
 
 LOCAL SETUP
 Installation
@@ -32,7 +32,7 @@ OTHER SETUP
 You will need to create a programmable search engine and get an API key by following these directions. You will need a Google account, and as part of this you may also need to sign up for Google Cloud.
 
 Other files
-You'll need to download a list of ad and tracker urls from here. We'll use this to filter out bad domains. Please save it as blacklist.txt.
+You'll need to download a list of ad and tracker urls from https://github.com/Franktheu/Custom-Filtering-Search-Engine. We'll use this to filter out bad domains. Please save it as blacklist.txt.
 
 RUN
 Run the project with:
