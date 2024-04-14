@@ -5,13 +5,11 @@ We'll use visual studio code to write our code and run it.
 
 Project Steps
 
-Setup a programmable search engine Custom Search API
-Create an API key for the engine
-Create a module to search using the API
-Create a Flask application to search and render results
-Create filters to re-rank results before displaying them
-Code
-You can find the code for this project here.
+Setup a programmable search engine Custom Search API, 
+Create an API key for the engine, 
+Create a module to search using the AP, 
+Create a Flask application to search and render results, 
+Create filters to re-rank results before displaying them.
 
 FILE OVERVIEW:
 
