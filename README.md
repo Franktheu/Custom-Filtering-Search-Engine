@@ -35,5 +35,5 @@ You'll need to download a list of ad and tracker urls from https://github.com/Fr
 RUN
 Run the project with:
 
-pip install -r requirements.txt
-flask --debug run
+'pip install -r requirements.txt'  
+ then 'flask --debug run'
