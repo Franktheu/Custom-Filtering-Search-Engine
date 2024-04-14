@@ -7,7 +7,7 @@ Project Steps
 
 Setup a programmable search engine Custom Search API, 
 Create an API key for the engine, 
-Create a module to search using the AP, 
+Create a module to search using the API, 
 Create a Flask application to search and render results, 
 and create filters to re-rank results before displaying them.
 
