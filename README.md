@@ -9,7 +9,7 @@ Setup a programmable search engine Custom Search API,
 Create an API key for the engine, 
 Create a module to search using the AP, 
 Create a Flask application to search and render results, 
-Create filters to re-rank results before displaying them.
+and create filters to re-rank results before displaying them.
 
 FILE OVERVIEW:
 
